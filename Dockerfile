@@ -1,4 +1,4 @@
-FROM google/cloud-sdk:228.0.0-alpine
+FROM google/cloud-sdk:229.0.0-alpine
 RUN gcloud components install kubectl --quiet \
     && gcloud components install beta --quiet \
     && apk add --update --no-cache jq py2-pip alpine-sdk python-dev docker \
