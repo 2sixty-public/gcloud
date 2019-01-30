@@ -9,5 +9,6 @@ RUN gcloud components install kubectl --quiet \
     && tar -xzf helm.tgz linux-amd64/helm \
     && mv linux-amd64/helm /bin \
     && rmdir linux-amd64 \
+    && pip install yq \
     && apk del alpine-sdk \
     && apk add -U --no-cache libstdc++ openssl coreutils util-linux openssl grep make
