@@ -4,7 +4,7 @@ COPY github-release.sh .
 
 RUN gcloud components install kubectl --quiet \
     && gcloud components install beta --quiet \
-    && apk add --update --no-cache jq py2-pip alpine-sdk python-dev docker \
+    && apk add --update --no-cache jq py2-pip alpine-sdk python-dev docker coreutils \
     && pip list --format json |jq -r .[].name |xargs pip install -U \
     && pip install google-cloud-datastore \
     && pip install jinja2-cli[yaml] \
