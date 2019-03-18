@@ -1,4 +1,4 @@
-FROM google/cloud-sdk:237.0.0-alpine
+FROM google/cloud-sdk:238.0.0-alpine
 
 COPY github-release.sh .
 
