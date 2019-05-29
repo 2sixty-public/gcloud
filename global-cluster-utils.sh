@@ -9,6 +9,7 @@ for_each_cluster() {
     cluster_file=`mktemp`
     gsutil cp $CLUSTER_STATE_URI $cluster_file
     errs=0
+    export CLUSTER_INDEX=0
     while read project region cluster; do
         auth_for_cluster $project $region $cluster
         for cmd in $*;do
@@ -21,6 +22,7 @@ for_each_cluster() {
             fi
             echo "================================================="
         done
+        CLUSTER_INDEX=`expr $CLUSTER_INDEX + 1`
     done < $cluster_file
     rm $cluster_file
     return $errs
