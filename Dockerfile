@@ -1,8 +1,5 @@
 FROM google/cloud-sdk:229.0.0-alpine
 
-COPY github-release.sh .
-COPY global-cluster-utils.sh .
-
 RUN gcloud components install kubectl --quiet \
     && gcloud components install beta --quiet \
     && apk add --update --no-cache jq py2-pip alpine-sdk python-dev docker unzip \
@@ -27,3 +24,5 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linu
 RUN apk del alpine-sdk \
     && apk add -U --no-cache libstdc++ openssl coreutils util-linux openssl grep make
 
+COPY github-release.sh .
+COPY global-cluster-utils.sh .

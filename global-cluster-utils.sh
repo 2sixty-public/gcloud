@@ -1,4 +1,3 @@
-#!/bin/sh
 
 for_each_cluster() {
     CLUSTER_STATE_URI=${CLUSTER_STATE_URI:-gs://sixty-sre-cluster-state/clusters}
@@ -9,6 +8,7 @@ for_each_cluster() {
 
     cluster_file=`mktemp`
     gsutil cp $CLUSTER_STATE_URI $cluster_file
+    errs=0
     while read project region cluster; do
         auth_for_cluster $project $region $cluster
         for cmd in $*;do
@@ -16,12 +16,14 @@ for_each_cluster() {
             echo "Executing '$cmd' for $project/$region/$cluster"
             if ! $cmd;then
                 echo "ERROR: FAILED! Abandoning run for cluster"
+                errs=`expr $errs + 1`
                 break
             fi
             echo "================================================="
         done
     done < $cluster_file
     rm $cluster_file
+    return $errs
 }
 
 auth_for_cluster() {
