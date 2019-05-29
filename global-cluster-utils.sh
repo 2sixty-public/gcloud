@@ -14,7 +14,7 @@ for_each_cluster() {
         auth_for_cluster $project $region $cluster
         for cmd in $*;do
             echo "================================================="
-            echo "Executing '$cmd' for $project/$region/$cluster"
+            echo "Executing '$cmd' for $CLUSTER_INDEX:$project/$region/$cluster"
             if ! $cmd;then
                 echo "ERROR: FAILED! Abandoning run for cluster"
                 errs=`expr $errs + 1`
