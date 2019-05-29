@@ -1,6 +1,7 @@
 FROM google/cloud-sdk:229.0.0-alpine
 
 COPY github-release.sh .
+COPY global-cluster-utils.sh .
 
 RUN gcloud components install kubectl --quiet \
     && gcloud components install beta --quiet \
