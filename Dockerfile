@@ -14,6 +14,7 @@ RUN curl -o helm.tgz https://storage.googleapis.com/kubernetes-helm/helm-v2.12.0
     && rm -r helm.tgz \
     && rmdir linux-amd64
 
+COPY github-release.sh .
 RUN ./github-release.sh kubernetes-sigs kustomize kustomize && \
     chmod +x kustomize && \
     mv kustomize /bin
@@ -24,5 +25,4 @@ RUN curl https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linu
 RUN apk del alpine-sdk \
     && apk add -U --no-cache libstdc++ openssl coreutils util-linux openssl grep make
 
-COPY github-release.sh .
 COPY global-cluster-utils.sh .
