@@ -6,6 +6,17 @@ for_each_cluster() {
         exit 1
     fi
 
+    if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ];then
+        echo "error: GOOGLE_APPLICATION_CREDENTIALS is not set to b64 encoded service account"
+        exit 1
+    fi
+
+    echo "Activating service account"
+    echo "$GOOGLE_APPLICATION_CREDENTIALS" | base64 --decode > "$HOME"/google-application-credentials.json
+    gcloud auth activate-service-account --key-file="$HOME"/google-application-credentials.json && \
+      rm -f "$HOME"/google-application-credentials.json || \
+      rm -f "$HOME"/google-application-credentials.json
+
     cluster_file=`mktemp`
     gsutil cp $CLUSTER_STATE_URI $cluster_file
     errs=0
@@ -36,10 +47,6 @@ auth_for_cluster() {
     echo Authenticating for cluster $project/$region/$cluster
 
     if [ ! -z "$GITLAB_CI" ]; then
-        echo "$GOOGLE_APPLICATION_CREDENTIALS" | base64 --decode > "$HOME"/google-application-credentials.json
-        gcloud auth activate-service-account --key-file="$HOME"/google-application-credentials.json && \
-          rm -f "$HOME"/google-application-credentials.json || \
-          rm -f "$HOME"/google-application-credentials.json
         gcloud config set project "$project"
         gcloud container clusters get-credentials "$cluster" \
             --region "$region" \
