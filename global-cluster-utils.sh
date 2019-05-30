@@ -6,13 +6,13 @@ for_each_cluster() {
         exit 1
     fi
 
-    if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ];then
-        echo "error: GOOGLE_APPLICATION_CREDENTIALS is not set to b64 encoded service account"
+    if [ -z "$DEPLOYMENT_CREDENTIALS" ];then
+        echo "error: DEPLOYMENT_CREDENTIALS is not set to b64 encoded service account"
         exit 1
     fi
 
     echo "Activating service account"
-    echo "$GOOGLE_APPLICATION_CREDENTIALS" | base64 --decode > "$HOME"/google-application-credentials.json
+    echo "$DEPLOYMENT_CREDENTIALS" | base64 --decode > "$HOME"/google-application-credentials.json
     gcloud auth activate-service-account --key-file="$HOME"/google-application-credentials.json && \
       rm -f "$HOME"/google-application-credentials.json || \
       rm -f "$HOME"/google-application-credentials.json
