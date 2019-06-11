@@ -22,7 +22,7 @@ for_each_cluster() {
     errs=0
     export CLUSTER_INDEX=0
     export CLUSTER_RANK=0
-    while read CLUSTER_RANK cluster project region; do
+    while read CLUSTER_RANK cluster project region nodeCidr rest; do
         auth_for_cluster $project $region $cluster
         for cmd in $*;do
             echo "================================================="
