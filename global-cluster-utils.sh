@@ -61,7 +61,7 @@ unified_docker_build_push() {
   local branch=${CI_COMMIT_REF_SLUG:-$(git branch | grep \* | cut -d ' ' -f2)}
   local commit_sha=${CI_COMMIT_SHA:-$(git rev-parse HEAD)}
   local imagetag
-  imagetag="$branch-$(echo "$commit_sha"|cut -c1-8)"
+  imagetag="${IMAGETAG:-$branch-$(echo "$commit_sha"|cut -c1-8)}"
 
   if [ -z "$BUILD_CREDENTIALS" ];then
       echo "error: BUILD_CREDENTIALS is not set to b64 encoded service account"
