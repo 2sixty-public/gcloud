@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 for_each_cluster() {
     CLUSTER_STATE_URI=${CLUSTER_STATE_URI:-gs://sixty-sre-cluster-state/clusters}
@@ -54,4 +55,47 @@ auth_for_cluster() {
     else
         echo "Running locally, skipping authentication"
     fi
+}
+
+unified_docker_build_push() {
+  local branch=${CI_COMMIT_REF_SLUG:-$(git branch | grep \* | cut -d ' ' -f2)}
+  local commit_sha=${CI_COMMIT_SHA:-$(git rev-parse HEAD)}
+  local imagetag
+  imagetag="${IMAGETAG:-$branch-$(echo "$commit_sha"|cut -c1-8)}"
+
+  if [ -z "$BUILD_CREDENTIALS" ];then
+      echo "error: BUILD_CREDENTIALS is not set to b64 encoded service account"
+      exit 1
+  fi
+
+  if [ -z "$IMAGEBASE" ];then
+      echo "error: IMAGEBASE is not set, please set it to something like: eu.gcr.io/something/something"
+      exit 1
+  fi
+  if [ -z "$DOCKER_FILE" ];then
+      echo "error: DOCKER_FILE is not set, please set it to the path of the Dockerfile you wish to build"
+      exit 1
+  fi
+  if [ -z "$DOCKER_CONTEXT" ];then
+      echo "error: DOCKER_CONTEXT is not set, please set it the Docker context (the root where your Dockerfile will run its commands)"
+      exit 1
+  fi
+
+  echo "$BUILD_CREDENTIALS" \
+    | base64 --decode \
+    | docker login -u _json_key --password-stdin https://"$(echo "$IMAGEBASE"|cut -f1 -d/)" # url like this because maybe it's eu.gcr.io or gcr.io or whatever
+  docker pull "$IMAGEBASE:$branch" || true # to reuse some layers built earlier
+  docker build --cache-from "$IMAGEBASE:$branch" \
+                -t "$IMAGEBASE:$branch" \
+                -t "$IMAGEBASE:$imagetag" \
+                -f "$DOCKER_FILE" "$DOCKER_CONTEXT" || \
+                docker build -t "$IMAGEBASE:$branch" \
+                            -t "$IMAGEBASE:$imagetag" \
+                            -f "$DOCKER_FILE" "$DOCKER_CONTEXT"
+  docker push "$IMAGEBASE:$branch"
+  docker push "$IMAGEBASE:$imagetag"
+  if [ "$branch" == "master" ]; then # so we know what is actually the latest... (in my head latest=latest stable build)
+    docker tag "$IMAGEBASE:$branch" "$IMAGEBASE:latest"
+    docker push "$IMAGEBASE:latest"
+  fi
 }
