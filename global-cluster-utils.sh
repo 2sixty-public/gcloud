@@ -2,10 +2,6 @@
 
 for_each_cluster() {
     CLUSTER_STATE_URI=${CLUSTER_STATE_URI:-gs://sixty-sre-cluster-state/clusters}
-    if [ -z "$CLUSTER_STATE_URI" ];then
-        echo "error: CLUSTER_STATE_URI is not set"
-        exit 1
-    fi
 
     if [ -z "$DEPLOYMENT_CREDENTIALS" ];then
         echo "error: DEPLOYMENT_CREDENTIALS is not set to b64 encoded service account"
