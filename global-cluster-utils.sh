@@ -28,7 +28,7 @@ for_each_cluster() {
         for cmd in $*;do
             echo "================================================="
             echo "Executing '$cmd' for $CLUSTER_INDEX:$project/$region/$cluster"
-            if ! $cmd;then
+            if ! $cmd < /dev/null;then
                 echo "ERROR: FAILED! Abandoning run for cluster"
                 errs=`expr $errs + 1`
                 break
