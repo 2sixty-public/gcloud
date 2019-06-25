@@ -85,7 +85,7 @@ unified_docker_build_push() {
     | base64 --decode \
     | docker login -u _json_key --password-stdin https://"$(echo "$IMAGEBASE"|cut -f1 -d/)" # url like this because maybe it's eu.gcr.io or gcr.io or whatever
   docker pull "$IMAGEBASE:$branch" || true # to reuse some layers built earlier
-  docker build --cache-from "$IMAGEBASE:$branch" \
+  docker build $* --cache-from "$IMAGEBASE:$branch" \
                 -t "$IMAGEBASE:$branch" \
                 -t "$IMAGEBASE:$imagetag" \
                 -f "$DOCKER_FILE" "$DOCKER_CONTEXT" || \
