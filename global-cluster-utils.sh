@@ -12,11 +12,7 @@ for_each_cluster() {
         exit 1
     fi
 
-    echo "Activating service account"
-    echo "$DEPLOYMENT_CREDENTIALS" | base64 --decode > "$HOME"/google-application-credentials.json
-    gcloud auth activate-service-account --key-file="$HOME"/google-application-credentials.json && \
-      rm -f "$HOME"/google-application-credentials.json || \
-      rm -f "$HOME"/google-application-credentials.json
+    activate_service_account
 
     cluster_file=`mktemp`
     gsutil cp $CLUSTER_STATE_URI $cluster_file
@@ -39,6 +35,14 @@ for_each_cluster() {
     done < $cluster_file
     rm $cluster_file
     return $errs
+}
+
+activate_service_account() {
+    echo "Activating service account"
+    echo "$DEPLOYMENT_CREDENTIALS" | base64 --decode > "$HOME"/google-application-credentials.json
+    gcloud auth activate-service-account --key-file="$HOME"/google-application-credentials.json && \
+      rm -f "$HOME"/google-application-credentials.json || \
+      rm -f "$HOME"/google-application-credentials.json
 }
 
 auth_for_cluster() {
