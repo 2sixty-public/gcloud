@@ -1,5 +1,5 @@
 FROM cypress/browsers:node8.9.3-chrome73
-ARG CLOUD_SDK_VERSION=232.0.0
+ARG CLOUD_SDK_VERSION=254.0.0
 ENV CLOUD_SDK_VERSION=$CLOUD_SDK_VERSION
 RUN apt-get -qqy update && apt-get install -qqy \
         curl \
