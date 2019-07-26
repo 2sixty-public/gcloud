@@ -3,6 +3,10 @@ ARG CLOUD_SDK_VERSION=254.0.0
 ENV CLOUD_SDK_VERSION=$CLOUD_SDK_VERSION
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -qqy nodejs
+RUN curl -fsSL https://get.docker.com -o get-docker.sh
+RUN sh get-docker.sh
+RUN curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+RUN chmod +x /usr/local/bin/docker-compose
 RUN apt-get -qqy update && apt-get install -qqy \
         curl \
         gcc \
