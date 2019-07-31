@@ -25,4 +25,4 @@ RUN apt-get -qqy update && apt-get install -qqy \
     apt-get update && \
     apt-get install -y google-cloud-sdk=${CLOUD_SDK_VERSION}-0
 RUN npm install -g @angular/cli@6.2.6
-RUN npm install cypress@3.4.1
+RUN npm install -g cypress@3.4.1
