@@ -89,7 +89,7 @@ unified_docker_build_push() {
                 -t "$IMAGEBASE:$branch" \
                 -t "$IMAGEBASE:$imagetag" \
                 -f "$DOCKER_FILE" "$DOCKER_CONTEXT" || \
-                docker build -t "$IMAGEBASE:$branch" \
+                docker build $* -t "$IMAGEBASE:$branch" \
                             -t "$IMAGEBASE:$imagetag" \
                             -f "$DOCKER_FILE" "$DOCKER_CONTEXT"
   docker push "$IMAGEBASE:$branch"
