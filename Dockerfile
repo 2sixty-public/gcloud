@@ -1,4 +1,4 @@
-FROM google/cloud-sdk:249.0.0-alpine
+FROM google/cloud-sdk:263.0.0-alpine
 
 RUN gcloud components install kubectl --quiet \
     && gcloud components install beta --quiet \
