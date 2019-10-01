@@ -1,8 +1,7 @@
-FROM cypress/browsers:node8.9.3-chrome73
+FROM cypress/browsers:node10.16.0-chrome77
 ARG CLOUD_SDK_VERSION=254.0.0
 ENV CLOUD_SDK_VERSION=$CLOUD_SDK_VERSION
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN apt-get install -qqy nodejs
 RUN curl -fsSL https://get.docker.com -o get-docker.sh
 RUN sh get-docker.sh
 RUN curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -24,7 +23,4 @@ RUN apt-get -qqy update && apt-get install -qqy \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     apt-get update && \
     apt-get install -y google-cloud-sdk=${CLOUD_SDK_VERSION}-0
-RUN npm install -g @angular/cli@6.2.6
-RUN npm install -g cypress@3.3.1
-RUN npm install -g cypress-cucumber-preprocessor@1.13.0
-RUN npm install -g cypress-pipe@1.5.0
+RUN npm install -g @angular/cli@7.3.9
