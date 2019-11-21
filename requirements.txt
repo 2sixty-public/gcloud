@@ -1,0 +1,4 @@
+ruamel.yaml==0.15.88
+Jinja2==2.10
+jsonschema==3.0.1
+yq==2.7.2
